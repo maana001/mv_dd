@@ -26,7 +26,7 @@ class Creature:
     def checkHealth(self):
         if self.hp<=0:
             print(f"{self.name} of class{self.__class__.__name__ } is dead" )
-            isDead=True
+            self.is_dead=True
 
         else: 
             print(f"{self.name} of class{self.__class__.__name__ } has {self.hp} hp left")
@@ -40,6 +40,7 @@ class Hero(Creature):
         self.hp += 20
         if self.hp > 100:
             self.hp = 100
+        self.checkHealth()
 
 class Monster(Creature):
     def __init__(self, name, hp, attack_points, target):
@@ -47,16 +48,19 @@ class Monster(Creature):
         self.target = target
 
     def should_attack(self):
-        if rd.randint(1,10) == 5:
+        if rd.randint(1,2) == 1:
+            print("Monster is attacking")
             self.attack(self.target)
+        else:
+            print("Monster is not attacking")
 
     def attack(self, object_to_attack):
         if self.is_dead==False:
            object_to_attack.get_attacked(self.attack_points)
 
 class NorskTeacher(Monster):
-    def __init__(self,name, hp, attack_points):
-        super.__init__(name, hp, attack_points)
+    def __init__(self,name, hp, attack_points, target):
+        super().__init__(name, hp, attack_points, target)
 
     def supriseTest(self):
         """
@@ -99,9 +103,10 @@ if __name__== "__main__":
     hero_player = Hero("Knud Knudsen", 100, 20)
 
     ivar_monster = Monster("Ivar Aasen", 100, 50, hero_player)
-    ingvild_teacher = NorskTeacher("Ingvild", 100, 10)
+    ingvild_teacher = NorskTeacher("Ingvild", 100, 10, hero_player)
     monster_list = [ivar_monster, ingvild_teacher]
     while True:
+        print("\n")
         # Check if player is dead
         if hero_player.hp <= 0:
             print("Game over")
@@ -111,19 +116,24 @@ if __name__== "__main__":
         while True:
             choice = input("Enter a for attack and h for heal: ")
             if choice == "a":
+                print("Player is attacking")
                 hero_player.attack(monster_list[0])
                 break
             elif choice == "h":
+                print("Player is healing")
                 hero_player.heal()
                 break
             else:
                 print("Invalid input")
 
         # Monster attack
+        items_to_remove = []
         for i in monster_list:
             if i.is_dead:
                 print("%s is dead and will not attack" %(i.name))
+                items_to_remove.append(i)
             else:
                 i.should_attack()
-
+        for i in items_to_remove:
+            monster_list.remove(i)
         
