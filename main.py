@@ -20,6 +20,14 @@ class Creature:
     
     def get_attacked(self, hp_reduce):
         self.hp -= hp_reduce
+        self.checkHealth()
+
+    def checkHealth(self):
+        if self.hp==0:
+            print(f"{self.name} of class{a.__class__.__name__ } is dead" )
+        else: 
+            print(f"{self.name} of class{a.__class__.__name__ } has {self.hp} hp left")
+            
 
 class Hero(Creature):
     def __init__(self, name, hp, attack_points):
@@ -35,14 +43,17 @@ class Monster(Creature):
         if rd.randint(1,10) == 5:
             self.attack(self.target)
 
+class NorskTeacher(Monster):
+    def __init__(self,name, hp, attack_points):
+        super.__init__(name, hp, attack_points)
 
-
-# knud_knudsen.attack(ivar_aasen)
-# ivar_aasen.giveInfo()
-
-# ivar_aasen.attack(knud_knudsen)
-# knud_knudsen.giveInfo()
-
+    def supriseTest(self):
+        """
+        The teacher has decided to test the class with a suprise test!
+        50% chance of double damage if nynorsk test!
+        """
+        nynorsk_test=rd.randint(0,1)
+        
 if __name__== "__main__":
     knud_knudsen = Hero("Knud", 100, 20)
 
@@ -51,4 +62,3 @@ if __name__== "__main__":
     while True:
         for i in monster_list:
             i.should_attack()
-
