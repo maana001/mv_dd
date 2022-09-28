@@ -24,15 +24,19 @@ class Creature:
 
     def checkHealth(self):
         if self.hp==0:
-            print(f"{self.name} of class{a.__class__.__name__ } is dead" )
+            print(f"{self.name} of class{self.__class__.__name__ } is dead" )
         else: 
-            print(f"{self.name} of class{a.__class__.__name__ } has {self.hp} hp left")
+            print(f"{self.name} of class{self.__class__.__name__ } has {self.hp} hp left")
             
 
 class Hero(Creature):
     def __init__(self, name, hp, attack_points):
         super().__init__(name, hp, attack_points)
-    
+
+    def heal(self):
+        self.hp += 20
+        if self.hp > 100:
+            self.hp = 100
 
 class Monster(Creature):
     def __init__(self, name, hp, attack_points, target):
@@ -55,10 +59,34 @@ class NorskTeacher(Monster):
         nynorsk_test=rd.randint(0,1)
         
 if __name__== "__main__":
-    knud_knudsen = Hero("Knud", 100, 20)
+    hero_player = Hero("Knud Knudsen", 100, 20)
 
-    ivar_aasen = Monster("Ivar", 100, 90, knud_knudsen)
-    monster_list = [ivar_aasen]
+    ivar_monster = Monster("Ivar Aasen", 100, 50, hero_player)
+    ingvild_teacher = NorskTeacher("Ingvild", 100, 10)
+    monster_list = [ivar_monster, ingvild_teacher]
     while True:
+        # Check if player is dead
+        if hero_player.hp <= 0:
+            print("Game over")
+            exit()
+        
+        # Players turn
+        while True:
+            choice = input("Enter a for attack and h for heal: ")
+            if choice == "a":
+                hero_player.attack(monster_list[0])
+                break
+            elif choice == "h":
+                hero_player.heal()
+                break
+            else:
+                print("Invalid input")
+
+        # Monster attack
         for i in monster_list:
-            i.should_attack()
+            if i.is_dead:
+                print("%s is dead and will not attack" %(i.name))
+            else:
+                i.should_attack()
+
+        
