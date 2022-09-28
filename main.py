@@ -6,6 +6,7 @@ class Creature:
         self.name=name
         self.hp=hp
         self.attack_points=attack_points
+        self.is_dead=False
 
     def giveInfo(self):
         print("###################")
@@ -23,8 +24,10 @@ class Creature:
         self.checkHealth()
 
     def checkHealth(self):
-        if self.hp==0:
+        if self.hp<=0:
             print(f"{self.name} of class{self.__class__.__name__ } is dead" )
+            isDead=True
+
         else: 
             print(f"{self.name} of class{self.__class__.__name__ } has {self.hp} hp left")
             
@@ -47,6 +50,10 @@ class Monster(Creature):
         if rd.randint(1,10) == 5:
             self.attack(self.target)
 
+    def attack(self, object_to_attack):
+        if self.is_dead==False:
+           object_to_attack.get_attacked(self.attack_points)
+
 class NorskTeacher(Monster):
     def __init__(self,name, hp, attack_points):
         super.__init__(name, hp, attack_points)
@@ -57,7 +64,37 @@ class NorskTeacher(Monster):
         50% chance of double damage if nynorsk test!
         """
         nynorsk_test=rd.randint(0,1)
-        
+        if nynorsk_test==1:
+            self.attack_points=self.attack_points*2
+    
+
+    def spanishTube(self):
+        """
+        You have been naughty
+        Time for punishment! The teacher deals 1.2 times damage!
+        """  
+        self.attack_points=self.attack_points*1.2
+    
+    def nyNorskExam(self):
+        """
+        You have your nynorsk exam tomorrow.
+        This means instant death
+        """
+        self.attack_points=1000
+
+    def attack(self, object_to_attack):
+        attack_method=rd.randint(1,100)
+        if attack_method<=10:
+            self.supriseTest()
+        if attack_method<40 and attack_method>10:
+            self.spanishTube()
+        if attack_method==100:
+            self.nyNorskExam()
+            
+        if self.is_dead==False:
+           object_to_attack.get_attacked(self.attack_points)
+
+
 if __name__== "__main__":
     hero_player = Hero("Knud Knudsen", 100, 20)
 
