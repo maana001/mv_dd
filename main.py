@@ -77,7 +77,9 @@ class NorskTeacher(Monster):
         50% chance of double damage if nynorsk test!
         """
         nynorsk_test=rd.randint(0,1)
+        print(f"{self.name} used suprise test.")
         if nynorsk_test==1:
+            print("And its nynorsk!!! Prepare to fail")
             object_to_attack.get_attacked(self.attack_points*2)    
 
     def spanishTube(self, object_to_attack):
@@ -85,14 +87,18 @@ class NorskTeacher(Monster):
         You have been naughty
         Time for punishment! The teacher deals 1.2 times damage!
         """  
+        print(f"{self.name} used spanish tube.")
         object_to_attack.get_attacked(self.attack_points*1.2)
     
     def nyNorskExam(self, object_to_attack):
         """
         You have your nynorsk exam tomorrow.
-        This means instant death
+        Death is imminent
         """
+        print(f"{self.name} used nynorsk exam. Say goodbye to your life")
         object_to_attack.get_attacked(self.attack_points*200)
+
+
 
     def attack(self, object_to_attack):
         attack_method=rd.randint(1,100)
