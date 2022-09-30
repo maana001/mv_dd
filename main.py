@@ -59,10 +59,10 @@ class Monster(Creature):
 
     def should_attack(self):
         if rd.randint(1,2) == 1 and self.is_dead == False:
-            print("%s monster is attacking" %(self.name))
+            print("%s monster is attacking and has %s hp left" %(self.name, self.hp))
             self.attack(self.target)
         else:
-            print("%s monster is not attacking" %(self.name))
+            print("%s monster is not attacking and has %s hp left" %(self.name, self.hp))
 
     def attack(self, object_to_attack):
         object_to_attack.get_attacked(self.attack_points)
@@ -99,19 +99,21 @@ class NorskTeacher(Monster):
         object_to_attack.get_attacked(self.attack_points*200)
 
 
-
     def attack(self, object_to_attack):
         attack_method=rd.randint(1,100)
         
-        if attack_method<=10:
+        if 0 <= attack_method <= 10:
             self.supriseTest(object_to_attack)
         
-        if attack_method<40 and attack_method>10:
+        elif 10 < attack_method < 40 and attack_method>10:
             self.spanishTube(object_to_attack)
 
-        if attack_method==100:
+        elif 40 < attack_method == 100:
             self.nyNorskExam(object_to_attack)
-            
+        
+        else:
+            # Use normal attack
+            object_to_attack.get_attacked(self.attack_points)
 
 if __name__== "__main__":
 
